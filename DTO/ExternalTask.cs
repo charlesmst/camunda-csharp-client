@@ -12,6 +12,7 @@ namespace CamundaClient.Dto
         public int? Retries { get; set; }
         public Dictionary<string, Variable> Variables { get; set; }
         public string TopicName { get; set; }
+        public string TenantId { get; set; }
         public string WorkerId { get; set; }
         public int? Priority { get; set; }
 

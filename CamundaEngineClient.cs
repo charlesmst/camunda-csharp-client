@@ -15,11 +15,11 @@ namespace CamundaClient
         private IList<ExternalTaskWorker> _workers = new List<ExternalTaskWorker>();
         private CamundaClientHelper _camundaClientHelper;
 
-        public CamundaEngineClient() : this(new Uri(DEFAULT_URL), null, null) { }
+        public CamundaEngineClient() : this(new Uri(DEFAULT_URL), null, null,null) { }
 
-        public CamundaEngineClient(Uri restUrl, string userName, string password)
+        public CamundaEngineClient(Uri restUrl, string userName, string password, string[] tenantIds)
         {
-            _camundaClientHelper = new CamundaClientHelper(restUrl, userName, password);
+            _camundaClientHelper = new CamundaClientHelper(restUrl, userName, password, tenantIds);
         }
 
         public BpmnWorkflowService BpmnWorkflowService => new BpmnWorkflowService(_camundaClientHelper);

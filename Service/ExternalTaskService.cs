@@ -43,7 +43,8 @@ namespace CamundaClient.Service
                 {
                     TopicName = topicName,
                     LockDuration = lockDurationInMilliseconds,
-                    Variables = variablesToFetch
+                    Variables = variablesToFetch,
+                    TenantIdIn = helper.TenantIds
                 };
                 lockRequest.Topics.Add(lockTopic);
             }
