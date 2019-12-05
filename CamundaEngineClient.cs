@@ -13,13 +13,21 @@ namespace CamundaClient
         public static string COCKPIT_URL = "http://localhost:8080/camunda/app/cockpit/default/";
 
         private IList<ExternalTaskWorker> _workers = new List<ExternalTaskWorker>();
+
+        public CamundaClientOptions Options { get; }
+
         private CamundaClientHelper _camundaClientHelper;
 
-        public CamundaEngineClient() : this(new Uri(DEFAULT_URL), null, null,null) { }
+        public CamundaEngineClient() : this(new Uri(DEFAULT_URL), null, null) { }
 
-        public CamundaEngineClient(Uri restUrl, string userName, string password, string[] tenantIds)
+
+        public CamundaEngineClient(Uri restUrl, string userName, string password) : this(new CamundaClientOptions() { RestUrl = restUrl, RestUsername = userName, RestPassword = password })
         {
-            _camundaClientHelper = new CamundaClientHelper(restUrl, userName, password, tenantIds);
+        }
+        public CamundaEngineClient(CamundaClientOptions options)
+        {
+            this.Options = options;
+            _camundaClientHelper = new CamundaClientHelper(options.RestUrl, options.RestUsername, options.RestPassword);
         }
 
         public BpmnWorkflowService BpmnWorkflowService => new BpmnWorkflowService(_camundaClientHelper);
@@ -28,7 +36,7 @@ namespace CamundaClient
 
         public RepositoryService RepositoryService => new RepositoryService(_camundaClientHelper);
 
-        public ExternalTaskService ExternalTaskService => new ExternalTaskService(_camundaClientHelper);
+        public ExternalTaskService ExternalTaskService => new ExternalTaskService(_camundaClientHelper, Options);
 
         public void Startup()
         {

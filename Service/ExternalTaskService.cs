@@ -14,10 +14,13 @@ namespace CamundaClient.Service
 
     public class ExternalTaskService
     {
+        public CamundaClientOptions Options { get; }
+
         private CamundaClientHelper helper;
 
-        public ExternalTaskService(CamundaClientHelper client)
+        public ExternalTaskService(CamundaClientHelper client, CamundaClientOptions options)
         {
+            this.Options = options;
             this.helper = client;
         }
 
@@ -33,10 +36,10 @@ namespace CamundaClient.Service
                 WorkerId = workerId,
                 MaxTasks = maxTasks
             };
-            //if (longPolling)
-            //{
-            //    lockRequest.AsyncResponseTimeout = 1 * 60 * 1000; // 1 minute
-            //}
+            if (Options.LongPooling )
+            {
+                lockRequest.AsyncResponseTimeout = Options.AsyncResponseTimeout; // 1 minute
+            }
             foreach (var topicName in topicNames)
             {
                 var lockTopic = new FetchAndLockTopic
@@ -44,7 +47,7 @@ namespace CamundaClient.Service
                     TopicName = topicName,
                     LockDuration = lockDurationInMilliseconds,
                     Variables = variablesToFetch,
-                    TenantIdIn = helper.TenantIds
+                    TenantIdIn = Options.TenantIds
                 };
                 lockRequest.Topics.Add(lockTopic);
             }
